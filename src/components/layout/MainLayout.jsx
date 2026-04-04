@@ -1,5 +1,6 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { RoleSwitcher } from "@/components/layout/RoleSwitcher";
+import { LoadingOverlay } from "@/components/layout/LoadingOverlay";
 import { useAppState } from "@/lib/state";
 
 export function MainLayout() {
@@ -7,6 +8,7 @@ export function MainLayout() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <LoadingOverlay />
       <header className="border-b bg-card/60 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
