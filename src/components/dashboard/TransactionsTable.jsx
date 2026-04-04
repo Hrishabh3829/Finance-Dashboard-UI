@@ -18,14 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppState } from "@/lib/state";
-
-function formatDate(value) {
-  return new Date(value).toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "2-digit",
-  });
-}
+import { formatDateShort } from "@/lib/format";
 
 export function TransactionsTable({ showActions = false }) {
   const { filteredTransactions, role, setTransactions, transactions, isLoading } = useAppState();
@@ -51,7 +44,7 @@ export function TransactionsTable({ showActions = false }) {
   const exportCsv = () => {
     const headers = ["date", "description", "category", "amount", "type"];
     const rows = filteredTransactions.map((t) => [
-      formatDate(t.date),
+      formatDateShort(t.date),
       t.description,
       t.category,
       t.amount,
@@ -82,7 +75,7 @@ export function TransactionsTable({ showActions = false }) {
       {
         accessorKey: "date",
         header: "Date",
-        cell: ({ row }) => formatDate(row.original.date),
+        cell: ({ row }) => formatDateShort(row.original.date),
       },
       {
         accessorKey: "description",

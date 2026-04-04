@@ -1,14 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppState } from "@/lib/state";
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { formatCurrency } from "@/lib/format";
 
 export function SummaryCards() {
   const { totals, isLoading } = useAppState();
