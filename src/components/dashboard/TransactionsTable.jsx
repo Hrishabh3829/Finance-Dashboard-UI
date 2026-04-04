@@ -33,6 +33,47 @@ export function TransactionsTable({ showActions = false }) {
     setTransactions(transactions.filter((t) => t.id !== id));
   };
 
+  const exportJson = () => {
+    const blob = new Blob([JSON.stringify(filteredTransactions, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "transactions.json";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportCsv = () => {
+    const headers = ["date", "description", "category", "amount", "type"];
+    const rows = filteredTransactions.map((t) => [
+      formatDate(t.date),
+      t.description,
+      t.category,
+      t.amount,
+      t.type,
+    ]);
+    const csvBody = [headers, ...rows]
+      .map((row) =>
+        row
+          .map((value) =>
+            `"${String(value).replace(/"/g, '""')}"`
+          )
+          .join(",")
+      )
+      .join("\n");
+
+    const csv = `\ufeff${csvBody}`;
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "transactions.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   const columns = useMemo(() => {
     const baseColumns = [
       {
@@ -110,12 +151,22 @@ export function TransactionsTable({ showActions = false }) {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between gap-2">
-        <CardTitle className="text-sm font-medium">Transactions</CardTitle>
-        <p className="text-xs text-muted-foreground">
-          {filteredTransactions.length} record
-          {filteredTransactions.length === 1 ? "" : "s"} visible
-        </p>
+      <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <div>
+          <CardTitle className="text-sm font-medium">Transactions</CardTitle>
+          <p className="text-xs text-muted-foreground">
+            {filteredTransactions.length} record
+            {filteredTransactions.length === 1 ? "" : "s"} visible
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" size="xs" onClick={exportCsv}>
+            Export CSV
+          </Button>
+          <Button variant="outline" size="xs" onClick={exportJson}>
+            Export JSON
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
