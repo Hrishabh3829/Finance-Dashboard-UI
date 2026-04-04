@@ -69,7 +69,7 @@ export function AdminTransactionsPage() {
             <PopoverTrigger asChild>
               <Button className="h-10 px-6 rounded-xl">Add transaction</Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[480px]">
+            <PopoverContent className="w-[calc(100vw-2rem)] max-w-[520px]">
               <PopoverHeader>
                 <PopoverTitle>Add transaction</PopoverTitle>
                 <PopoverDescription>
@@ -77,7 +77,7 @@ export function AdminTransactionsPage() {
                 </PopoverDescription>
               </PopoverHeader>
               <form onSubmit={handleSubmit} className="grid gap-4">
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-1">
                     <label className="text-xs text-muted-foreground">Date</label>
                     <input
@@ -99,7 +99,7 @@ export function AdminTransactionsPage() {
                   </div>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   <div className="space-y-1">
                     <label className="text-xs text-muted-foreground">Amount (₹)</label>
                     <input
@@ -137,7 +137,7 @@ export function AdminTransactionsPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-xs text-muted-foreground">
                     All fields are required before adding a transaction.
                   </p>
