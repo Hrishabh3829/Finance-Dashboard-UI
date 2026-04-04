@@ -11,7 +11,7 @@ export function MainLayout() {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <LoadingOverlay />
       <header className="border-b bg-card/60 backdrop-blur">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary text-lg font-semibold">
               ₹
@@ -21,12 +21,12 @@ export function MainLayout() {
               <p className="text-xs text-muted-foreground">Track, understand, and improve spending</p>
             </div>
           </div>
-          <nav className="flex items-center gap-4 text-sm">
+          <nav className="-mx-1 flex items-center gap-2 overflow-x-auto text-sm sm:mx-0 sm:gap-4">
             <NavLink
               to="/"
               end
               className={({ isActive }) =>
-                `px-2 py-1 rounded-md transition-colors ${
+                `whitespace-nowrap px-2 py-1 rounded-md transition-colors ${
                   isActive
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground"
@@ -38,7 +38,7 @@ export function MainLayout() {
             <NavLink
               to="/transactions"
               className={({ isActive }) =>
-                `px-2 py-1 rounded-md transition-colors ${
+                `whitespace-nowrap px-2 py-1 rounded-md transition-colors ${
                   isActive
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground"
@@ -50,7 +50,7 @@ export function MainLayout() {
             <NavLink
               to="/insights"
               className={({ isActive }) =>
-                `px-2 py-1 rounded-md transition-colors ${
+                `whitespace-nowrap px-2 py-1 rounded-md transition-colors ${
                   isActive
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground"
@@ -62,7 +62,7 @@ export function MainLayout() {
             <NavLink
               to="/admin"
               className={({ isActive }) =>
-                `px-2 py-1 rounded-md transition-colors ${
+                `whitespace-nowrap px-2 py-1 rounded-md transition-colors ${
                   isActive
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground"
@@ -75,7 +75,7 @@ export function MainLayout() {
               <NavLink
                 to="/admin/transactions"
                 className={({ isActive }) =>
-                  `px-2 py-1 rounded-md transition-colors ${
+                  `whitespace-nowrap px-2 py-1 rounded-md transition-colors ${
                     isActive
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:text-foreground"
@@ -86,7 +86,7 @@ export function MainLayout() {
               </NavLink>
             )}
           </nav>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground sm:justify-end">
             <span className="hidden sm:inline-flex">Current role:</span>
             <span className="font-medium capitalize text-foreground">{role}</span>
             <RoleSwitcher />
