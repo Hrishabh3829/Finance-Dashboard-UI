@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { initialTransactions } from "@/lib/mockData";
 
+const STORAGE_KEY = "finance-dashboard-state";
+
 const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
@@ -15,6 +17,58 @@ export function AppProvider({ children }) {
   const [maxAmount, setMaxAmount] = useState("");
   const [sortBy, setSortBy] = useState("date-desc"); // date-desc | amount-desc | amount-asc
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return;
+
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed.transactions)) {
+        setTransactions(parsed.transactions);
+      }
+      if (parsed.role === "viewer" || parsed.role === "admin") {
+        setRole(parsed.role);
+      }
+      if (typeof parsed.search === "string") setSearch(parsed.search);
+      if (parsed.typeFilter) setTypeFilter(parsed.typeFilter);
+      if (Array.isArray(parsed.categoryFilters)) setCategoryFilters(parsed.categoryFilters);
+      if (typeof parsed.dateFrom === "string") setDateFrom(parsed.dateFrom);
+      if (typeof parsed.dateTo === "string") setDateTo(parsed.dateTo);
+      if (typeof parsed.minAmount === "string") setMinAmount(parsed.minAmount);
+      if (typeof parsed.maxAmount === "string") setMaxAmount(parsed.maxAmount);
+      if (parsed.sortBy) setSortBy(parsed.sortBy);
+    } catch (error) {
+      // ignore corrupted storage
+    }
+  }, []);
+
+  useEffect(() => {
+    const payload = {
+      transactions,
+      role,
+      search,
+      typeFilter,
+      categoryFilters,
+      dateFrom,
+      dateTo,
+      minAmount,
+      maxAmount,
+      sortBy,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  }, [
+    transactions,
+    role,
+    search,
+    typeFilter,
+    categoryFilters,
+    dateFrom,
+    dateTo,
+    minAmount,
+    maxAmount,
+    sortBy,
+  ]);
 
   useEffect(() => {
     const id = setTimeout(() => setIsLoading(false), 700);

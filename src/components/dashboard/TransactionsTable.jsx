@@ -1,11 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -27,6 +29,7 @@ function formatDate(value) {
 
 export function TransactionsTable({ showActions = false }) {
   const { filteredTransactions, role, setTransactions, transactions, isLoading } = useAppState();
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
 
   const handleDelete = (id) => {
     if (role !== "admin") return;
@@ -147,6 +150,9 @@ export function TransactionsTable({ showActions = false }) {
     data: filteredTransactions,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+    state: { pagination },
   });
 
   return (
@@ -182,49 +188,84 @@ export function TransactionsTable({ showActions = false }) {
             No transactions match the current filters.
           </p>
         ) : (
-          <Table className="text-xs md:text-sm">
-            <TableHeader className="text-[11px] uppercase tracking-wide text-muted-foreground">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead
-                      key={header.id}
-                      className={
-                        header.column.id === "amount" || header.column.id === "actions"
-                          ? "text-right"
-                          : "text-left"
-                      }
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className="bg-card/60">
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={
-                        cell.column.id === "amount" || cell.column.id === "actions"
-                          ? "text-right"
-                          : "text-left"
-                      }
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <div className="space-y-3">
+            <Table className="text-xs md:text-sm">
+              <TableHeader className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead
+                        key={header.id}
+                        className={
+                          header.column.id === "amount" || header.column.id === "actions"
+                            ? "text-right"
+                            : "text-left"
+                        }
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} className="bg-card/60">
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={
+                          cell.column.id === "amount" || cell.column.id === "actions"
+                            ? "text-right"
+                            : "text-left"
+                        }
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between text-xs">
+              <div className="text-muted-foreground">
+                Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <Select
+                  value={String(table.getState().pagination.pageSize)}
+                  onChange={(e) => table.setPageSize(Number(e.target.value))}
+                  className="h-8 min-w-[110px]"
+                >
+                  <option value="5">5 / page</option>
+                  <option value="10">10 / page</option>
+                  <option value="20">20 / page</option>
+                </Select>
+                <Button
+                  variant="outline"
+                  size="xs"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="xs"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          </div>
         )}
       </CardContent>
     </Card>

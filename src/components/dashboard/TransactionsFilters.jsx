@@ -192,9 +192,27 @@ export function TransactionsFilters() {
                   </div>
                 </div>
 
-                <DrawerFooter className="flex items-center justify-between">
-                  <Button type="button" variant="ghost" size="sm" onClick={clearAllFilters}>
+                <DrawerFooter className="flex items-center justify-between gap-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearAllFilters}
+                  >
                     Clear all
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      clearAllFilters();
+                      setSearch("");
+                      setTypeFilter("all");
+                      setSortBy("date-desc");
+                    }}
+                  >
+                    Reset defaults
                   </Button>
                   <DrawerClose asChild>
                     <Button type="button" size="sm">
