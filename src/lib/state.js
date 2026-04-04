@@ -8,7 +8,11 @@ export function AppProvider({ children }) {
   const [role, setRole] = useState("viewer"); // "viewer" | "admin"
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all"); // all | income | expense
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [categoryFilters, setCategoryFilters] = useState([]);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [minAmount, setMinAmount] = useState("");
+  const [maxAmount, setMaxAmount] = useState("");
   const [sortBy, setSortBy] = useState("date-desc"); // date-desc | amount-desc | amount-asc
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,8 +37,33 @@ export function AppProvider({ children }) {
       data = data.filter((t) => t.type === typeFilter);
     }
 
-    if (categoryFilter !== "all") {
-      data = data.filter((t) => t.category === categoryFilter);
+    if (categoryFilters.length > 0) {
+      data = data.filter((t) => categoryFilters.includes(t.category));
+    }
+
+    if (dateFrom) {
+      const from = new Date(dateFrom);
+      data = data.filter((t) => new Date(t.date) >= from);
+    }
+
+    if (dateTo) {
+      const to = new Date(dateTo);
+      to.setHours(23, 59, 59, 999);
+      data = data.filter((t) => new Date(t.date) <= to);
+    }
+
+    if (minAmount) {
+      const min = Number(minAmount);
+      if (!Number.isNaN(min)) {
+        data = data.filter((t) => t.amount >= min);
+      }
+    }
+
+    if (maxAmount) {
+      const max = Number(maxAmount);
+      if (!Number.isNaN(max)) {
+        data = data.filter((t) => t.amount <= max);
+      }
     }
 
     if (sortBy === "date-desc") {
@@ -46,7 +75,17 @@ export function AppProvider({ children }) {
     }
 
     return data;
-  }, [transactions, search, typeFilter, categoryFilter, sortBy]);
+  }, [
+    transactions,
+    search,
+    typeFilter,
+    categoryFilters,
+    dateFrom,
+    dateTo,
+    minAmount,
+    maxAmount,
+    sortBy,
+  ]);
 
   const totals = useMemo(() => {
     const income = transactions
@@ -125,8 +164,16 @@ export function AppProvider({ children }) {
     setSearch,
     typeFilter,
     setTypeFilter,
-    categoryFilter,
-    setCategoryFilter,
+    categoryFilters,
+    setCategoryFilters,
+    dateFrom,
+    setDateFrom,
+    dateTo,
+    setDateTo,
+    minAmount,
+    setMinAmount,
+    maxAmount,
+    setMaxAmount,
     sortBy,
     setSortBy,
     filteredTransactions,
