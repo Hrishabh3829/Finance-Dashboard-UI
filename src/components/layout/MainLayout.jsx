@@ -71,6 +71,20 @@ export function MainLayout() {
             >
               Admin
             </NavLink>
+            {role === "admin" && (
+              <NavLink
+                to="/admin/transactions"
+                className={({ isActive }) =>
+                  `px-2 py-1 rounded-md transition-colors ${
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`
+                }
+              >
+                Manage
+              </NavLink>
+            )}
           </nav>
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span className="hidden sm:inline-flex">Current role:</span>

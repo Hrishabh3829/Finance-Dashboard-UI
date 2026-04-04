@@ -6,7 +6,16 @@ import { TransactionsPage } from "@/pages/user/TransactionsPage";
 import { InsightsPage } from "@/pages/user/InsightsPage";
 import { AdminDashboardPage } from "@/pages/admin/AdminDashboardPage";
 import { AdminTransactionsPage } from "@/pages/admin/AdminTransactionsPage";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AccessDenied } from "@/pages/admin/AccessDenied";
+import { useAppState } from "@/lib/state";
+
+function AdminRoute({ children }) {
+  const { role } = useAppState();
+  if (role !== "admin") {
+    return <AccessDenied />;
+  }
+  return children;
+}
 
 const appRouter = createBrowserRouter([
   {
@@ -36,11 +45,19 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/admin",
-        element: <AdminDashboardPage />,
+        element: (
+          <AdminRoute>
+            <AdminDashboardPage />
+          </AdminRoute>
+        ),
       },
       {
         path: "/admin/transactions",
-        element: <AdminTransactionsPage />,
+        element: (
+          <AdminRoute>
+            <AdminTransactionsPage />
+          </AdminRoute>
+        ),
       },
       {
         path: "*",
