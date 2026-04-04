@@ -1,4 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAppState } from "@/lib/state";
 
 function formatCurrency(value) {
@@ -10,7 +11,7 @@ function formatCurrency(value) {
 }
 
 export function SummaryCards() {
-  const { totals } = useAppState();
+  const { totals, isLoading } = useAppState();
 
   const items = [
     {
@@ -40,7 +41,11 @@ export function SummaryCards() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className={`text-2xl font-semibold ${item.tone}`}>{item.value}</p>
+            {isLoading ? (
+              <Skeleton className="h-7 w-28" />
+            ) : (
+              <p className={`text-2xl font-semibold ${item.tone}`}>{item.value}</p>
+            )}
           </CardContent>
         </Card>
       ))}

@@ -1,8 +1,27 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAppState } from "@/lib/state";
 
 export function CategoryBreakdown() {
-  const { transactions } = useAppState();
+  const { transactions, isLoading } = useAppState();
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium">Spending by category</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Skeleton className="h-3 w-28" />
+          <Skeleton className="h-2 w-full" />
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-2 w-full" />
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-2 w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   const expenses = transactions.filter((t) => t.type === "expense");
 

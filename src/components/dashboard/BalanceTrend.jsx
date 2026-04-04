@@ -1,9 +1,24 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAppState } from "@/lib/state";
 
 // very light-weight, SVG based "time" visualization using running balance
 export function BalanceTrend() {
-  const { transactions, totals } = useAppState();
+  const { transactions, totals, isLoading } = useAppState();
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium">Balance trend</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-3 w-3/4" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (!transactions.length) {
     return (
