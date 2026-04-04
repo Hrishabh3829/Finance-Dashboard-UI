@@ -24,7 +24,7 @@ export function RoleSwitcher() {
       />
       <ComboboxContent align="end">
         <ComboboxList>
-          <ComboboxEmpty>No roles found.</ComboboxEmpty>
+          <ComboboxEmpty>Roles</ComboboxEmpty>
           {roles.map((item) => (
             <ComboboxItem key={item.value} value={item.value}>
               {item.label}
