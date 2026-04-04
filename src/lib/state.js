@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { initialTransactions } from "@/lib/mockData";
 
 const AppContext = createContext(null);
@@ -10,6 +10,12 @@ export function AppProvider({ children }) {
   const [typeFilter, setTypeFilter] = useState("all"); // all | income | expense
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState("date-desc"); // date-desc | amount-desc | amount-asc
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const id = setTimeout(() => setIsLoading(false), 700);
+    return () => clearTimeout(id);
+  }, []);
 
   const filteredTransactions = useMemo(() => {
     let data = [...transactions];
@@ -126,6 +132,7 @@ export function AppProvider({ children }) {
     filteredTransactions,
     totals,
     insights,
+    isLoading,
   };
 
   return React.createElement(AppContext.Provider, { value }, children);

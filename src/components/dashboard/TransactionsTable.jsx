@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -25,7 +26,7 @@ function formatDate(value) {
 }
 
 export function TransactionsTable({ showActions = false }) {
-  const { filteredTransactions, role, setTransactions, transactions } = useAppState();
+  const { filteredTransactions, role, setTransactions, transactions, isLoading } = useAppState();
 
   const handleDelete = (id) => {
     if (role !== "admin") return;
@@ -117,7 +118,15 @@ export function TransactionsTable({ showActions = false }) {
         </p>
       </CardHeader>
       <CardContent>
-        {filteredTransactions.length === 0 ? (
+        {isLoading ? (
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-40" />
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-48" />
+            <Skeleton className="h-4 w-36" />
+            <Skeleton className="h-4 w-44" />
+          </div>
+        ) : filteredTransactions.length === 0 ? (
           <p className="text-sm text-muted-foreground">
             No transactions match the current filters.
           </p>

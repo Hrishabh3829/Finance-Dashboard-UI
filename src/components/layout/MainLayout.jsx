@@ -1,6 +1,7 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { RoleSwitcher } from "@/components/layout/RoleSwitcher";
 import { LoadingOverlay } from "@/components/layout/LoadingOverlay";
+import ThemeToggleButton from "@/components/ui/theme-toggle-button";
 import { useAppState } from "@/lib/state";
 
 export function MainLayout() {
@@ -75,6 +76,7 @@ export function MainLayout() {
             <span className="hidden sm:inline-flex">Current role:</span>
             <span className="font-medium capitalize text-foreground">{role}</span>
             <RoleSwitcher />
+            <ThemeToggleButton variant="circle" start="center" />
           </div>
         </div>
       </header>

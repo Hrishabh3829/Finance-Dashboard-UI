@@ -1,8 +1,9 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAppState } from "@/lib/state";
 
 export function InsightsPanel() {
-  const { insights } = useAppState();
+  const { insights, isLoading } = useAppState();
 
   const { highestCategory, monthlyComparison } = insights;
 
@@ -15,7 +16,12 @@ export function InsightsPanel() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {!highestCategory ? (
+          {isLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-3 w-44" />
+              <Skeleton className="h-3 w-28" />
+            </div>
+          ) : !highestCategory ? (
             <p className="text-sm text-muted-foreground">
               No expense data yet. Once you add expenses, we will highlight the
               category where you spend the most.
@@ -42,7 +48,13 @@ export function InsightsPanel() {
           <CardTitle className="text-sm font-medium">Monthly comparison</CardTitle>
         </CardHeader>
         <CardContent>
-          {!monthlyComparison ? (
+          {isLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-3 w-32" />
+              <Skeleton className="h-3 w-28" />
+              <Skeleton className="h-3 w-40" />
+            </div>
+          ) : !monthlyComparison ? (
             <p className="text-sm text-muted-foreground">
               Not enough data to compare months yet.
             </p>
