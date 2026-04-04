@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
 import { BalanceTrend } from "@/components/dashboard/BalanceTrend";
 import { CategoryBreakdown } from "@/components/dashboard/CategoryBreakdown";
@@ -12,6 +13,12 @@ export function AdminDashboardPage() {
           Admin sees the same high-level picture, with additional ability to
           manage data from the Admin → Manage transactions section.
         </p>
+        <Link
+          to="/admin/transactions"
+          className="inline-flex items-center rounded-md border border-input px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+        >
+          Go to manage transactions
+        </Link>
       </section>
       <SummaryCards />
       <div className="grid gap-4 md:grid-cols-[2fr,1.2fr]">

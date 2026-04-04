@@ -5,6 +5,14 @@ import { TransactionsTable } from "@/components/dashboard/TransactionsTable";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { categories } from "@/lib/mockData";
 
 export function AdminTransactionsPage() {
@@ -55,98 +63,109 @@ export function AdminTransactionsPage() {
         </p>
       </header>
 
-      <Card className={!isAdmin ? "opacity-60" : ""}>
-        <CardHeader>
-          <CardTitle className="text-sm font-medium">
-            {isAdmin ? "Add transaction" : "Add transaction (admin only)"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {!isAdmin && (
-            <p className="mb-3 text-xs text-muted-foreground">
-              You are currently in viewer mode. Switch to admin using the role
-              dropdown in the header to enable editing.
+      {isAdmin ? (
+        <div className="flex justify-center">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button className="h-10 px-6 rounded-xl">Add transaction</Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[480px]">
+              <PopoverHeader>
+                <PopoverTitle>Add transaction</PopoverTitle>
+                <PopoverDescription>
+                  Capture income or expense with clean, structured inputs.
+                </PopoverDescription>
+              </PopoverHeader>
+              <form onSubmit={handleSubmit} className="grid gap-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Date</label>
+                    <input
+                      type="date"
+                      value={form.date}
+                      onChange={(e) => handleChange("date", e.target.value)}
+                      className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Description</label>
+                    <input
+                      type="text"
+                      value={form.description}
+                      onChange={(e) => handleChange("description", e.target.value)}
+                      placeholder="e.g. Dinner, Phone bill"
+                      className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Amount (₹)</label>
+                    <input
+                      type="number"
+                      value={form.amount}
+                      onChange={(e) => handleChange("amount", e.target.value)}
+                      min={0}
+                      className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Category</label>
+                    <Select
+                      value={form.category}
+                      onChange={(e) => handleChange("category", e.target.value)}
+                      className="h-10 w-full text-sm rounded-xl"
+                    >
+                      {categories.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Type</label>
+                    <Select
+                      value={form.type}
+                      onChange={(e) => handleChange("type", e.target.value)}
+                      className="h-10 w-full text-sm rounded-xl"
+                    >
+                      <option value="income">Income</option>
+                      <option value="expense">Expense</option>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                  <p className="text-xs text-muted-foreground">
+                    All fields are required before adding a transaction.
+                  </p>
+                  <Button type="submit" className="h-10 px-6 rounded-xl">
+                    Add transaction
+                  </Button>
+                </div>
+              </form>
+            </PopoverContent>
+          </Popover>
+        </div>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-medium">Admin only</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Viewer role is read-only. Switch to admin from the header to add
+              or delete transactions.
             </p>
-          )}
-          <form
-            onSubmit={handleSubmit}
-            className="grid gap-3 md:grid-cols-5 md:items-end"
-          >
-            <div className="space-y-1 md:col-span-1">
-              <label className="text-xs text-muted-foreground">Date</label>
-              <input
-                type="date"
-                value={form.date}
-                onChange={(e) => handleChange("date", e.target.value)}
-                disabled={!isAdmin}
-                className="h-9 w-full rounded-md border border-input bg-background px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-60"
-              />
-            </div>
-            <div className="space-y-1 md:col-span-1.5">
-              <label className="text-xs text-muted-foreground">Description</label>
-              <input
-                type="text"
-                value={form.description}
-                onChange={(e) => handleChange("description", e.target.value)}
-                placeholder="e.g. Dinner, Phone bill"
-                disabled={!isAdmin}
-                className="h-9 w-full rounded-md border border-input bg-background px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-60"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs text-muted-foreground">Amount (₹)</label>
-              <input
-                type="number"
-                value={form.amount}
-                onChange={(e) => handleChange("amount", e.target.value)}
-                min={0}
-                disabled={!isAdmin}
-                className="h-9 w-full rounded-md border border-input bg-background px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-60"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs text-muted-foreground">Category</label>
-              <Select
-                value={form.category}
-                onChange={(e) => handleChange("category", e.target.value)}
-                disabled={!isAdmin}
-                className="h-9 w-full text-xs disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </Select>
-            </div>
-            <div className="space-y-1 flex gap-2 md:flex-col md:gap-0">
-              <div className="flex-1 space-y-1">
-                <label className="text-xs text-muted-foreground">Type</label>
-                <Select
-                  value={form.type}
-                  onChange={(e) => handleChange("type", e.target.value)}
-                  disabled={!isAdmin}
-                  className="h-9 w-full text-xs disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <option value="income">Income</option>
-                  <option value="expense">Expense</option>
-                </Select>
-              </div>
-              <Button
-                type="submit"
-                disabled={!isAdmin}
-                className="mt-5 h-9 w-full md:w-auto disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                Add
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       <section className="space-y-3">
         <TransactionsFilters />
-        <TransactionsTable showActions />
+        <TransactionsTable showActions={isAdmin} />
       </section>
     </div>
   );
