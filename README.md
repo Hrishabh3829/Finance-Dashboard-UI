@@ -6,6 +6,9 @@
 - Drawer-based advanced filters and animated theme toggle
 - Loading states and skeletons for polished UX
 
+# Notes
+This project is intentionally simple and focused on UI/UX clarity. Data is mocked on the client and persisted in localStorage so the dashboard feels real without a backend.
+
 # Setup
 ```bash
 npm install
