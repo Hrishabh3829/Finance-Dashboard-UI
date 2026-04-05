@@ -1,6 +1,5 @@
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { DatePickerInput } from "@/components/ui/date-picker-input";
 import {
   Drawer,
   DrawerClose,
@@ -120,18 +119,24 @@ export function TransactionsFilters() {
                   <div className="space-y-2">
                     <p className="text-xs font-semibold text-muted-foreground">Date range</p>
                     <div className="grid gap-2">
-                      <DatePickerInput
-                        label="From"
-                        value={dateFrom}
-                        onChange={setDateFrom}
-                        placeholder="June 01, 2026"
-                      />
-                      <DatePickerInput
-                        label="To"
-                        value={dateTo}
-                        onChange={setDateTo}
-                        placeholder="June 30, 2026"
-                      />
+                      <div className="space-y-1">
+                        <label className="text-xs text-muted-foreground">From</label>
+                        <input
+                          type="date"
+                          value={dateFrom}
+                          onChange={(e) => setDateFrom(e.target.value)}
+                          className="h-9 w-full rounded-md border border-input bg-background px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs text-muted-foreground">To</label>
+                        <input
+                          type="date"
+                          value={dateTo}
+                          onChange={(e) => setDateTo(e.target.value)}
+                          className="h-9 w-full rounded-md border border-input bg-background px-2 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                        />
+                      </div>
                     </div>
                   </div>
 
